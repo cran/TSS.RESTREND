@@ -4,7 +4,8 @@
 \alias{VPR.BFAST}
 \title{BFAST Breakpoint Detector}
 \usage{
-VPR.BFAST(CTSR.VI, CTSR.RF, season = "none")
+VPR.BFAST(CTSR.VI, CTSR.RF, CTSR.TM = NULL, season = "none",
+  BFAST.raw = FALSE, h = 0.15)
 }
 \arguments{
 \item{CTSR.VI}{Complete Monthly Time Series of Vegetation Index values.
@@ -12,10 +13,22 @@ An object of class \code{'ts'} object without NA's.}
 
 \item{CTSR.RF}{Complete Time Series of Rainfall. An object of class 'ts' object without NA's
 and be the same length and cover the same time range as CTSR.VI.
-If ACU.table is provided, CTSR.RF will be automitaclly calculated using the
+If ACP.table is provided, CTSR.RF will be automitaclly calculated using the
 \code{\link{ACP.calculator}}}
 
-\item{season}{See \code{\link[bfast]{bfast}}}
+\item{CTSR.TM}{Complete Time Series of temperature. An object of class 'ts' object without NA's
+and be the same length and cover the same time range as CTSR.VI.  Default (CTSR.TM=NULL).}
+
+\item{season}{See \code{\link[bfast]{bfast}}. This season value only applies to bfast done using the CTS
+VPR. if a non VPR adjusted BFAST is performed.a harmonic season is used.}
+
+\item{BFAST.raw}{Defualt = FALSE
+If TRUE will perform a BFAST (season="harmonic") on the CTSR.VI
+If FALSE will perform BFAST on the CTSR VPR residuals}
+
+\item{h}{See \code{\link[bfast]{bfast}}, The.minimal segment size between potentially detected breaks in the trend model
+given as fraction relative to the sample size (i.e. the minimal number of observations in each segment
+divided by the total length of the timeseries. Default h = 0.15.}
 }
 \value{
 List of objects:
@@ -28,14 +41,18 @@ List of objects:
 
 \bold{CTS.lm}
          the \code{\link[stats]{lm}} of CTSR.VI and CTSR.RF
+
+\bold{BFAST.type}
+         the type of BFAST done (VPR residuals or on the VI timeseris itself)
 }
 \description{
-Uses the Complete VI and Rainfall time series, calculates a \code{\link[stats]{lm}} between them
-     And then performs a \code{\link[bfast]{bfast}}
+takes the Complete VI and optimally accumulated Rainfall (and tmperature if included), calculates a \code{\link[stats]{lm}} between them
+     And then performs a \code{\link[bfast]{bfast}}.in the residuals.  If BFAST.raw=TRUE, it will perform bfast on the Complete VI ts
 }
 \examples{
+\dontrun{
 VPRBFdem <- VPR.BFAST(segVPRCTSR$cts.NDVI, segVPRCTSR$cts.precip)
-print(VPRBFdem)
+print(VPRBFdem)}
 }
 \author{
 Arden Burrell, arden.burrell@unsw.edu.au

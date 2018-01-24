@@ -4,20 +4,30 @@
 \alias{TSSRESTREND}
 \title{Time Series Segmentation of Residual Trends (MAIN FUNCTION)}
 \usage{
-TSSRESTREND(CTSR.VI, ACP.table = FALSE, CTSR.RF = FALSE, anu.VI = FALSE,
-  acu.RF = FALSE, VI.index = FALSE, rf.b4 = FALSE, rf.af = FALSE,
-  sig = 0.05, season = "none")
+TSSRESTREND(CTSR.VI, ACP.table = FALSE, ACT.table = NULL, CTSR.RF = FALSE,
+  CTSR.TM = NULL, anu.VI = FALSE, acu.RF = FALSE, acu.TM = NULL,
+  VI.index = FALSE, rf.b4 = FALSE, rf.af = FALSE, sig = 0.05,
+  season = "none", exclude = 0, allow.negative = FALSE,
+  allowneg.retest = FALSE, h = 0.15)
 }
 \arguments{
 \item{CTSR.VI}{Complete Monthly Time Series of Vegetation Index values.
 An object of class \code{'ts'} object without NA's.}
 
-\item{ACP.table}{A table of every combination of offset period and accumulation period.
-ACP.table can be calculated using the \code{\link{rainfall.accumulator}}.}
+\item{ACP.table}{A table of every combination of offset period and accumulation period.for precipitation
+ACP.table can be calculated using the \code{\link{climate.accumulator}}.}
+
+\item{ACT.table}{A table of every combination of offset period and accumulation period.for temperature
+ACP.table can be calculated using the \code{\link{climate.accumulator}}.}
 
 \item{CTSR.RF}{Complete Time Series of Rainfall. An object of class 'ts' object without NA's
 and be the same length and cover the same time range as CTSR.VI.
-If ACU.table is provided, CTSR.RF will be automitaclly calculated using the
+If ACP.table is provided, CTSR.RF will be automitaclly calculated using the
+\code{\link{ACP.calculator}}}
+
+\item{CTSR.TM}{Complete Time Series of temperature. An object of class 'ts' object without NA's
+and be the same length and cover the same time range as CTSR.VI.  Default (CTSR.TM=NULL).
+If ACT.table is provided, CTSR.RF will be automitaclly calculated using the
 \code{\link{ACP.calculator}}}
 
 \item{anu.VI}{The annual (Growing season) max VI. Must be a object of class \code{'ts'} without NA's.
@@ -25,7 +35,11 @@ if anu.VI=FALSE, it will be calculated from the CTSR.VI using \code{\link{AnMaxV
 
 \item{acu.RF}{The optimal accumulated rainfall for anu.VI. Must be a object of class \code{'ts'} without
 NA's and be of equal length and temporal range to anu.VI. if anu.RF=FALSE, it will be
-calculated from ACP.table usingthe \code{\link{AnnualRF.Cal}}}
+calculated from ACP.table usingthe \code{\link{AnnualClim.Cal}}}
+
+\item{acu.TM}{The optimal accumulated rainfall for anu.TM. Must be a object of class \code{'ts'} without
+NA's and be of equal length and temporal range to anu.TM. if anu.TM=FALSE, it will be
+calculated from ACT.table usingthe \code{\link{AnnualClim.Cal}}}
 
 \item{VI.index}{the index of the CTSR.VI ts that the anu.VI values occur at. Must be the same length
 as anu.VI. NOTE. R indexs from 1 rather than 0.
@@ -33,15 +47,31 @@ if VI.index=FALSE, it will be calculated from the CTSR.VI using \code{\link{AnMa
 
 \item{rf.b4}{If a breakpoint in the VPR is detected this is the optimial accumulated rainfall before
 the breakpoint. must be the same length as the anu.VI. If ACP.table is provided it will
-be generated using \code{\link{AnnualRF.Cal}}}
+be generated using \code{\link{AnnualClim.Cal}}}
 
 \item{rf.af}{If a breakpoint in the VPR is detected this is the optimial accumulated rainfall after
 the breakpoint. must be the same length as the anu.VI. If ACP.table is provided it will
-be generated using \code{\link{AnnualRF.Cal}}}
+be generated using \code{\link{AnnualClim.Cal}}}
 
 \item{sig}{Significance of all the functions. defualt sig=0.05}
 
-\item{season}{See \code{\link[bfast]{bfast}}}
+\item{season}{See \code{\link[bfast]{bfast}}. This season value only applies to bfast done using the CTS
+VPR. if a non VPR adjusted BFAST is performed.a harmonic season is used.}
+
+\item{exclude}{A numberic vector containg months excluded from breakpoint detection.  This was included to
+allow sensor transitions to be masked.}
+
+\item{allow.negative}{If true, will not preference positive slope in either CTSR or VI calculations. default=FALSE is set
+because negative associations between rainfall and vegetation in water limited ecosystems is unexpected
+If temperature data is included then this paramter is forced to TRUE.}
+
+\item{allowneg.retest}{default=FALSE
+If temperature data is provided but found to not be significant then a retest is performed.
+This paramter is to allow negative on re-test.}
+
+\item{h}{See \code{\link[bfast]{bfast}}, The.minimal segment size between potentially detected breaks in the trend model
+given as fraction relative to the sample size (i.e. the minimal number of observations in each segment
+divided by the total length of the timeseries. Default h = 0.15.}
 }
 \value{
 An object of class \code{'TSSRESTREND'} is a list with the following elements:
@@ -81,9 +111,9 @@ An object of class \code{'TSSRESTREND'} is a list with the following elements:
 }
 \description{
 Time Series Segmented Residual Trend (TSS.RESTREND) methodology.Takes in a complete monthly
-time series of a VI and its corrosponding precipitation. Will caculate missing input varibles,
-look for breakpoints using the BFAST function. The significance of the breakpoin in the residuals
-and the VPR is assessed using a chow test an then the total time series change is calculated.
+time series of a VI and its corrosponding precipitation (and temperature). It then looks looks
+for breakpoints using the BFAST function. The significance of the breakpoin in the residuals
+and the VPR is assessed using a Chow test, then, the total time series change is calculated.
 }
 \note{
 if ACP.table = FALSE, CTSR.RF and acu.RF must be provided as well as
@@ -91,12 +121,11 @@ if ACP.table = FALSE, CTSR.RF and acu.RF must be provided as well as
 }
 \examples{
 \dontrun{
-#To get the letest version of the package (Still in development)
+#To get the latest version of the package (Still in development)
 install.packages("devtools")
 library("devtools")
 install_github("ArdenB/TSSRESTREND", subdir="TSS.RESTREND")
 library(TSS.RESTREND)
-}
 #Find the path of the rabbitRF.csv dataset, read it in and turn it into a time series
 rf.path<- system.file("extdata", "rabbitRF.csv", package = "TSS.RESTREND", mustWork = TRUE)
 in.RF <- read.csv(rf.path)
@@ -112,11 +141,9 @@ max.acp <- 12
 #Define the max offset period
 max.osp <- 4
 #Create a table of every possible precipitation value given the max.acp and max.osp
-ACP.table <- rainfall.accumulator(CTSR.VI, rf.data, max.acp, max.osp)
+ACP.table <- climate.accumulator(CTSR.VI, rf.data, max.acp, max.osp)
 results <- TSSRESTREND(CTSR.VI, ACP.table)
 print(results)
-
-\dontrun{
 plot(results, verbose=TRUE)
 }
 

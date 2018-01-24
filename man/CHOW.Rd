@@ -4,7 +4,7 @@
 \alias{CHOW}
 \title{Chow test on detected breakpoints}
 \usage{
-CHOW(anu.VI, acu.RF, VI.index, breakpoints, sig = 0.05)
+CHOW(anu.VI, acu.RF, VI.index, breakpoints, acu.TM = NULL, sig = 0.05)
 }
 \arguments{
 \item{anu.VI}{The annual (Growing season) max VI. Must be a object of class \code{'ts'} without NA's.
@@ -12,13 +12,17 @@ if anu.VI=FALSE, it will be calculated from the CTSR.VI using \code{\link{AnMaxV
 
 \item{acu.RF}{The optimal accumulated rainfall for anu.VI. Must be a object of class \code{'ts'} without
 NA's and be of equal length and temporal range to anu.VI. if anu.RF=FALSE, it will be
-calculated from ACP.table usingthe \code{\link{AnnualRF.Cal}}}
+calculated from ACP.table usingthe \code{\link{AnnualClim.Cal}}}
 
 \item{VI.index}{the index of the CTSR.VI ts that the anu.VI values occur at. Must be the same length
 as anu.VI. NOTE. R indexs from 1 rather than 0.
 if VI.index=FALSE, it will be calculated from the CTSR.VI using \code{\link{AnMaxVI}}.}
 
 \item{breakpoints}{vector containing the breakpoints detected by \code{\link{VPR.BFAST}} (bkps)}
+
+\item{acu.TM}{The optimal accumulated rainfall for anu.TM. Must be a object of class \code{'ts'} without
+NA's and be of equal length and temporal range to anu.TM. if anu.TM=FALSE, it will be
+calculated from ACT.table usingthe \code{\link{AnnualClim.Cal}}}
 
 \item{sig}{Significance of all the functions. defualt sig=0.05}
 }
@@ -44,12 +48,14 @@ Takes the breakpoints detected by \code{\link{VPR.BFAST}}, finds the most signif
 the residuals and the VPR.
 }
 \examples{
+\dontrun{
 #Test the complete time series for breakpoints
 VPRBFdem <- VPR.BFAST(segVPRCTSR$cts.NDVI, segVPRCTSR$cts.precip)
-bp<-as.numeric(VPRBFdem$bkps)
+bp <- as.numeric(VPRBFdem$bkps)
 #test the significance of the breakpoints
 reschow <- CHOW(segVPR$max.NDVI, segVPR$acum.RF, segVPR$index, bp)
 print(reschow)
+}
 
 }
 \author{
