@@ -4,7 +4,9 @@
 \name{stdRESTRENDctRF}
 \alias{stdRESTRENDctRF}
 \title{Data frame containing the raw rainfall data set ending dec 2013 with a frquency of 12}
-\format{R data frame}
+\format{
+R data frame
+}
 \usage{
 stdRESTRENDctRF
 }
@@ -15,4 +17,3 @@ contains raw monthly precipitation
 \code{\link{stdRESTREND}} for the annual values for the same pixel
 }
 \keyword{datasets}
-

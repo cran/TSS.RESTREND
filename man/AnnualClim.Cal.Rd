@@ -4,8 +4,15 @@
 \alias{AnnualClim.Cal}
 \title{Antecedental accumulation calculator for the annual max VI time series}
 \usage{
-AnnualClim.Cal(anu.VI, VI.index, ACP.table, ACT.table = NULL,
-  Breakpoint = FALSE, allow.negative = FALSE, allowneg.retest = FALSE)
+AnnualClim.Cal(
+  anu.VI,
+  VI.index,
+  ACP.table,
+  ACT.table = NULL,
+  Breakpoint = FALSE,
+  allow.negative = FALSE,
+  allowneg.retest = FALSE
+)
 }
 \arguments{
 \item{anu.VI}{The annual (Growing season) max VI. Must be a object of class \code{'ts'} without NA's.
@@ -99,4 +106,3 @@ print(ARCseg)
 \author{
 Arden Burrell, arden.burrell@unsw.edu.au
 }
-

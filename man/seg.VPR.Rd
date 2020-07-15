@@ -4,8 +4,19 @@
 \alias{seg.VPR}
 \title{Segmented Vegetation Climate Relationship}
 \usage{
-seg.VPR(anu.VI, acu.RF, VI.index, breakpoint, rf.b4, rf.af, acu.TM = NULL,
-  tm.b4 = NULL, tm.af = NULL, sig = 0.05)
+seg.VPR(
+  anu.VI,
+  acu.RF,
+  VI.index,
+  breakpoint,
+  rf.b4,
+  rf.af,
+  acu.TM = NULL,
+  tm.b4 = NULL,
+  tm.af = NULL,
+  sig = 0.05,
+  retnonsig = FALSE
+)
 }
 \arguments{
 \item{anu.VI}{The annual (Growing season) max VI. Must be a object of class \code{'ts'} without NA's.
@@ -42,6 +53,9 @@ the breakpoint. It must be the same length as the anu.VI. If ACT.table is provid
 be generated using \code{\link{AnnualClim.Cal}}}
 
 \item{sig}{Significance of all the functions. defualt sig=0.05}
+
+\item{retnonsig}{Bool. New in v0.3.0. Allows TSSRESTREND to return change estimates of values that filed the sig component in the residual analysis.
+defualt FALSE will give the same result as eralier versions.}
 }
 \value{
 a list of class TSSRESTREND.
@@ -62,4 +76,3 @@ print(VPRres)
 \author{
 Arden Burrell, arden.burrell@unsw.edu.au
 }
-

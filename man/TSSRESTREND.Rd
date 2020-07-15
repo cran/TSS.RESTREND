@@ -4,11 +4,26 @@
 \alias{TSSRESTREND}
 \title{Time Series Segmentation of Residual Trends (MAIN FUNCTION)}
 \usage{
-TSSRESTREND(CTSR.VI, ACP.table = FALSE, ACT.table = NULL, CTSR.RF = FALSE,
-  CTSR.TM = NULL, anu.VI = FALSE, acu.RF = FALSE, acu.TM = NULL,
-  VI.index = FALSE, rf.b4 = FALSE, rf.af = FALSE, sig = 0.05,
-  season = "none", exclude = 0, allow.negative = FALSE,
-  allowneg.retest = FALSE, h = 0.15)
+TSSRESTREND(
+  CTSR.VI,
+  ACP.table = FALSE,
+  ACT.table = NULL,
+  CTSR.RF = FALSE,
+  CTSR.TM = NULL,
+  anu.VI = FALSE,
+  acu.RF = FALSE,
+  acu.TM = NULL,
+  VI.index = FALSE,
+  rf.b4 = FALSE,
+  rf.af = FALSE,
+  sig = 0.05,
+  season = "none",
+  exclude = 0,
+  allow.negative = FALSE,
+  allowneg.retest = FALSE,
+  h = 0.15,
+  retnonsig = FALSE
+)
 }
 \arguments{
 \item{CTSR.VI}{Complete Monthly Time Series of Vegetation Index values.
@@ -72,6 +87,9 @@ This paramter is to allow negative on re-test.}
 \item{h}{See \code{\link[bfast]{bfast}}, The.minimal segment size between potentially detected breaks in the trend model
 given as fraction relative to the sample size (i.e. the minimal number of observations in each segment
 divided by the total length of the timeseries. Default h = 0.15.}
+
+\item{retnonsig}{Bool. New in v0.3.0. Allows TSSRESTREND to return change estimates of values that filed the sig component in the residual analysis.
+defualt FALSE will give the same result as eralier versions.}
 }
 \value{
 An object of class \code{'TSSRESTREND'} is a list with the following elements:
@@ -148,13 +166,12 @@ plot(results, verbose=TRUE)
 }
 
 }
-\author{
-Arden Burrell, arden.burrell@unsw.edu.au
-}
 \seealso{
 \itemize{
    \item \code{\link{plot.TSSRESTREND}}
    \item \code{\link{print.TSSRESTREND}}
    }
 }
-
+\author{
+Arden Burrell, arden.burrell@unsw.edu.au
+}

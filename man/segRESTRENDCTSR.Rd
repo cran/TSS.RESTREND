@@ -4,7 +4,9 @@
 \name{segRESTRENDCTSR}
 \alias{segRESTRENDCTSR}
 \title{Data frame containing the Complete Times Series data for a segmented RESTREND analysis}
-\format{R data frame}
+\format{
+R data frame
+}
 \source{
 a single pixel from \code{\link[gimms]{monthlyComposite}}
 }
@@ -18,4 +20,3 @@ contains CTSR.VI and CTSR.RF. See \code{\link{TSSRESTREND}}. Starts 1/1982 and e
 \code{\link{stdRESTREND}} for the annual values for the same pixel
 }
 \keyword{datasets}
-

@@ -4,7 +4,9 @@
 \name{segVPR}
 \alias{segVPR}
 \title{Data frame containing the annual data for a segVPR analysis}
-\format{R data frame}
+\format{
+R data frame
+}
 \source{
 \code{\link[gimms]{gimms-package}}
 }
@@ -15,4 +17,3 @@ segVPR
 contains anu.VI, acu.RF,  VI.index, rf.b4, rf.af. Range 1982 - 2013. Breakpoint for this pixel is 24 (2005)
 }
 \keyword{datasets}
-
